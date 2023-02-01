@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import RecipeCard from "./RecipeCard";
+
 function SearchBar({ recipes }) {
   const [search, setSearch] = useState("");
-  console.log(recipes);
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  let matchingRecipes = recipes.filter((recipe) => {
-    let title = recipe.recipe_name.toLowerCase();
-    return title === search;
-  });
-
-  let searchContent = matchingRecipes.map((recipe) => {
-    return <RecipeCard recipes={recipe} />;
-  });
+  const recipeDisplay = recipes
+    .filter((recipe, index) => {
+      let title = recipe.recipe_name.toLowerCase();
+      let searchParams = search.toLowerCase();
+      return title.includes(searchParams);
+    })
+    .map((recipe, index) => {
+      return <RecipeCard recipe={recipe} />;
+    });
 
   return (
     <div>
@@ -32,7 +33,8 @@ function SearchBar({ recipes }) {
           <IoSearch size="2em" color="#DA7635" />
         </button>
       </form>
-      {searchContent}
+
+      {recipeDisplay}
     </div>
   );
 }
